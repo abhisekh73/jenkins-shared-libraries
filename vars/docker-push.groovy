@@ -1,8 +1,6 @@
-def dockerPush(Map args) {
-    def image = args.image
-    def tag = args.tag
-    def registry = args.registry
-
-    sh "docker tag ${image}:${tag} ${registry}/${image}:${tag}"
-    sh "docker push ${registry}/${image}:${tag}"
+def call(String Project, String ImageTag, String dockerhubuser){
+  withCredentials([usernamePassword(credentialsId: 'docker-hub-cred', passwordVariable: 'dockerHubPass', usernameVariable: 'dockerHubUser')]) {
+      sh "docker login -u ${dockerhubuser} -p ${dockerhubpass}"
+  }
+  sh "docker push ${dockerhubuser}/${Project}:${ImageTag}"
 }
